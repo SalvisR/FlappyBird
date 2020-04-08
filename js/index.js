@@ -1,6 +1,6 @@
 const canvas = document.getElementById('canvas');
-canvas.width = 600;
-canvas.height = 400;
+canvas.width = 500;
+canvas.height = 300;
 
 const c = canvas.getContext('2d');
 
@@ -36,7 +36,11 @@ window.onload = function () {
   function animate() {
     flappy.update();
     draw();
-    requestAnimationFrame(animate);
+    const request = requestAnimationFrame(animate);
+
+    if (flappy.gameOver) {
+      cancelAnimationFrame(request);
+    }
   }
   animate();
 }
