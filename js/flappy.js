@@ -5,8 +5,8 @@ class Flappy {
     this.width = width;
     this.birdX = Number(50);
     this.birdY = Number(150);
-    this.birdW = 35;
-    this.birdH = 24;
+    this.birdW = Number(35);
+    this.birdH = Number(24);
     this.gravity = 2;
     this.pipes = [{
       pipePos: {
@@ -14,12 +14,13 @@ class Flappy {
         y: Number(0)
       },
       pipeSize: {
-        w: 50,
-        h: 200
+        w: Number(50),
+        h: Number(180)
       }
     }];
     this.gap = 70;
     this.gameOver = false;
+    this.score = 0;
   }
 
   drawBird(bird) {
@@ -27,7 +28,7 @@ class Flappy {
   }
 
   flyBird() {
-    this.birdY -= 30;
+    this.birdY -= 25;
   }
 
   drawPipes(pipeNorth, pipeSouth) {
@@ -41,8 +42,9 @@ class Flappy {
   }
 
   createPipes() {
-    const height = Math.floor(Math.random() * (this.height - 100)) + 50;
-
+    const height = Math.floor(Math.random() * (this.height - 150)) + 50;
+    console.log(height);
+    
     const pipe = {
       pipePos: {
         x: Number(this.width),
@@ -62,8 +64,19 @@ class Flappy {
         this.gameOver = true;
       }
 
-      if (pipe.pipePos.x <= this.birdX && pipe.pipePos.x <= this.birdX + this.birdW && pipe.pipeSize.h < this.birdY && pipe.pipeSize.h + this.gap < this.birdY + this.birdH) {
+      if (pipe.pipePos.x <= this.birdX + this.birdW
+        && pipe.pipePos.x + pipe.pipeSize.w >= this.birdX
+        && (pipe.pipeSize.h > this.birdY
+        || pipe.pipeSize.h + this.gap < this.birdY+this.birdH)) {
         this.gameOver = true;
+      }
+    });
+  }
+
+  addScore() {
+    this.pipes.forEach(pipe => {
+      if (this.birdX + this.birdW === pipe.pipePos.x + pipe.pipeSize.w) {
+        this.score++;
       }
     });
   }
@@ -72,6 +85,7 @@ class Flappy {
     this.c.clearRect(0, 0, innerWidth, innerHeight);
     this.birdY += this.gravity;
     this.checkGameOver();
+    this.addScore();
     this.pipes.forEach(pipe => {
       if (pipe.pipePos.x === this.width - 220) {
         this.createPipes();

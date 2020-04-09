@@ -23,14 +23,16 @@ const flappy = new Flappy(c, h, w);
 function draw() {
   c.drawImage(bg, 0, 0, canvas.width, canvas.height);
   c.drawImage(fg, 0, canvas.height - 50, canvas.width, 50);
-
-  flappy.drawBird(bird);
+  
   flappy.drawPipes(pipeNorth, pipeSouth);
+  flappy.drawBird(bird);
+  c.fillText(`Score: ${flappy.score}`, 5,15);
 }
 
 window.onload = function () {
   c.drawImage(bg, 0, 0, canvas.width, canvas.height);
   c.drawImage(fg, 0, canvas.height - 50, canvas.width, 50);
+
   draw();
 
   function animate() {
