@@ -2,6 +2,8 @@ const canvas = document.getElementById('canvas');
 canvas.width = 500;
 canvas.height = 300;
 
+const fgHeight = 50;
+
 const c = canvas.getContext('2d');
 
 const bg = new Image();
@@ -18,15 +20,16 @@ pipeSouth.src = '../images/pipeSouth.png';
 const h = canvas.height;
 const w = canvas.width;
 
-const flappy = new Flappy(c, h, w);
+const flappy = new Flappy(c, h, w, fgHeight);
+flappy.createPipes();
 
 function draw() {
   c.drawImage(bg, 0, 0, canvas.width, canvas.height);
-  c.drawImage(fg, 0, canvas.height - 50, canvas.width, 50);
-  
+
   flappy.drawPipes(pipeNorth, pipeSouth);
+  c.drawImage(fg, 0, canvas.height - fgHeight, canvas.width, fgHeight);
   flappy.drawBird(bird);
-  c.fillText(`Score: ${flappy.score}`, 5,15);
+  c.fillText(`Score: ${flappy.score}`, 5, 15);
 }
 
 window.onload = function () {

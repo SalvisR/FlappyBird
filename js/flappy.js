@@ -1,5 +1,5 @@
 class Flappy {
-  constructor(c, height, width) {
+  constructor(c, height, width, fgHeight) {
     this.c = c;
     this.height = height;
     this.width = width;
@@ -8,19 +8,22 @@ class Flappy {
     this.birdW = Number(35);
     this.birdH = Number(24);
     this.gravity = 2;
-    this.pipes = [{
-      pipePos: {
-        x: Number(this.width),
-        y: Number(0)
-      },
-      pipeSize: {
-        w: Number(50),
-        h: Number(180)
-      }
-    }];
+    this.pipes = [
+      //   {
+      //   pipePos: {
+      //     x: Number(this.width),
+      //     y: Number(0)
+      //   },
+      //   pipeSize: {
+      //     w: Number(50),
+      //     h: Number(160)
+      //   }
+      // }
+    ];
     this.gap = 70;
     this.gameOver = false;
     this.score = 0;
+    this.fgHeight = fgHeight;
   }
 
   drawBird(bird) {
@@ -34,7 +37,7 @@ class Flappy {
   drawPipes(pipeNorth, pipeSouth) {
     this.pipes.forEach(pipe => {
       const y = pipe.pipeSize.h + this.gap;
-      const height = this.height - pipe.pipeSize.h - this.gap;
+      const height = this.height - pipe.pipeSize.h;
 
       this.c.drawImage(pipeNorth, pipe.pipePos.x, pipe.pipePos.y, pipe.pipeSize.w, pipe.pipeSize.h);
       this.c.drawImage(pipeSouth, pipe.pipePos.x, y, pipe.pipeSize.w, height);
@@ -42,9 +45,8 @@ class Flappy {
   }
 
   createPipes() {
-    const height = Math.floor(Math.random() * (this.height - 150)) + 50;
-    console.log(height);
-    
+    const height = Math.floor(Math.random() * (160 - 20) + 20);;
+
     const pipe = {
       pipePos: {
         x: Number(this.width),
@@ -60,14 +62,14 @@ class Flappy {
 
   checkGameOver() {
     this.pipes.forEach(pipe => {
-      if (this.birdY + this.birdH > this.height) {
+      if (this.birdY + this.birdH > this.height - this.fgHeight) {
         this.gameOver = true;
       }
 
-      if (pipe.pipePos.x <= this.birdX + this.birdW
-        && pipe.pipePos.x + pipe.pipeSize.w >= this.birdX
-        && (pipe.pipeSize.h > this.birdY
-        || pipe.pipeSize.h + this.gap < this.birdY+this.birdH)) {
+      if (pipe.pipePos.x <= this.birdX + this.birdW &&
+        pipe.pipePos.x + pipe.pipeSize.w >= this.birdX &&
+        (pipe.pipeSize.h > this.birdY ||
+          pipe.pipeSize.h + this.gap < this.birdY + this.birdH)) {
         this.gameOver = true;
       }
     });
